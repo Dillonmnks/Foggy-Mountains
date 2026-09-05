@@ -4,15 +4,15 @@ public class MyCamera : MonoBehaviour
 {
     private void OnEnable()
     {
-        Player.OnPlayerCollision += Wobble;
+        Player.OnObstacleCollision += Wobble;
     }
 
     private void OnDisable()
     {
-        Player.OnPlayerCollision -= Wobble;
+        Player.OnObstacleCollision -= Wobble;
     }
 
-    public void Wobble(Collision collision)
+    public void Wobble(Collider other)
     {
         //Apply wobble logic here
 
