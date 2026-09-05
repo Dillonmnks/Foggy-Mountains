@@ -2,6 +2,18 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public Lane CurrentLane = Lane.Middle;
+
+    private bool canGoLeft;
+    private bool canGoRight;
+
+    public enum Lane
+    {
+        Left,
+        Middle,
+        Right
+    }
+
     private void OnEnable()
     {
         PlayerInput.Instance.OnLeft += HandleLeft;
@@ -14,29 +26,75 @@ public class PlayerController : MonoBehaviour
         PlayerInput.Instance.OnRight -= HandleRight;
     }
 
+    private void Update()
+    {
+        switch (CurrentLane)
+        {
+            case Lane.Left:
+                canGoLeft = false;
+                canGoRight = true;
+                break;
+            case Lane.Middle:
+                canGoLeft = true;
+                canGoRight = true;
+                break;
+            case Lane.Right:
+                canGoLeft = true;
+                canGoRight = false;
+                break;
+        }
+    }
+
+    private void UpdateLocation()
+    {
+        float newX = LaneManager.LaneX[(int)CurrentLane];
+
+        transform.position = new Vector3(newX, transform.position.y, transform.position.z);
+    }
+
     private void HandleLeft(bool pressed)
     {
-        if (pressed)
+        if (!pressed)
+            return;
+
+        if(canGoLeft)
         {
-            Debug.Log("The Left button was pressed n shiet");
+            GoLeft();
+        }
+    }
+
+    private void GoLeft()
+    {
+        if(CurrentLane == Lane.Middle)
+        {
+            CurrentLane = Lane.Left;
+            UpdateLocation();
+            return;
         }
 
-        else
-        {
-            Debug.Log("Huh... left button wasnt pressed i guess...");
-        }
+        CurrentLane = Lane.Middle;
+        UpdateLocation();
     }
 
     private void HandleRight(bool pressed)
     {
-        if (pressed)
+        if (!pressed)
+            return;
+
+        if (canGoRight)
+            GoRight();
+    }
+
+    private void GoRight()
+    {
+        if(CurrentLane == Lane.Middle)
         {
-            Debug.Log("The Right button was pressed n shiet");
+            CurrentLane = Lane.Right;
+            UpdateLocation();
+            return;
         }
 
-        else
-        {
-            Debug.Log("Huh... right button wasnt pressed i guess...");
-        }
+        CurrentLane = Lane.Middle;
+        UpdateLocation();
     }
 }

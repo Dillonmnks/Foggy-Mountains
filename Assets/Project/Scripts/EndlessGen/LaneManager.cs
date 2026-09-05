@@ -18,6 +18,4 @@ public class LaneManager : MonoBehaviour
     {
         speed = Mathf.Min(speed + acceleration * Time.deltaTime, maxSpeed);
     }
-
-
 }

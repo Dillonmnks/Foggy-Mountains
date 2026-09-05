@@ -371,6 +371,8 @@ GameObject:
   - component: {fileID: 410732812}
   - component: {fileID: 410732811}
   - component: {fileID: 410732810}
+  - component: {fileID: 410732814}
+  - component: {fileID: 410732815}
   - component: {fileID: 410732809}
   m_Layer: 0
   m_Name: Player
@@ -478,12 +480,37 @@ Transform:
   m_GameObject: {fileID: 410732808}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.2336, y: -0, z: 8.31654}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &410732814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 410732808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3948567ffc0047f4b80da2274175f9f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerController
+  CurrentLane: 1
+--- !u!114 &410732815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 410732808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f7f51fa0f3351347b3a28a71e6f4268, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInput
 --- !u!1 &824880076
 GameObject:
   m_ObjectHideFlags: 0
@@ -610,6 +637,7 @@ GameObject:
   - component: {fileID: 1916958526}
   - component: {fileID: 1916958525}
   - component: {fileID: 1916958528}
+  - component: {fileID: 1916958529}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -830,6 +858,18 @@ MonoBehaviour:
       enableFptlForForwardOpaque: 0
       enableBigTilePrepass: 0
       isFptlEnabled: 0
+--- !u!114 &1916958529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1916958524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 839934d3c45455943b6e14ed9ae2908d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MyCamera
 --- !u!1 &2089635575
 GameObject:
   m_ObjectHideFlags: 0
