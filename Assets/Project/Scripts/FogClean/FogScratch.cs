@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -7,13 +8,13 @@ public class FogScratch : MonoBehaviour
     [Header("Setup")]
     public Texture2D baseTexture;
     public int brushRadius = 20;
-
-    [Header("Feel")]
     public float dragStepSize = 8f;
+    [Range(0f, 1f)] public float clearThreshold = 0.8f;
 
     private Texture2D clonedTexture;
     private Image uiImage;
     private Color32[] pixels;
+    private Color32[] originalPixels;
     private static Color32 Clear32 = new Color32(0, 0, 0, 0);
 
     private int width, height, totalPixels, clearedPixels;
@@ -22,23 +23,29 @@ public class FogScratch : MonoBehaviour
 
     public float ScratchedPercentage => totalPixels == 0 ? 0f : (float)clearedPixels / totalPixels;
 
-    void Start()
+    void Awake()
     {
         uiImage = GetComponent<Image>();
-
         clonedTexture = Instantiate(baseTexture);
 
         width = clonedTexture.width;
         height = clonedTexture.height;
         totalPixels = width * height;
 
-        pixels = clonedTexture.GetPixels32();
+        originalPixels = clonedTexture.GetPixels32();
+        pixels = new Color32[originalPixels.Length];
+        Array.Copy(originalPixels, pixels, pixels.Length);
 
         uiImage.sprite = Sprite.Create(
             clonedTexture,
             new Rect(0, 0, width, height),
             Vector2.one * 0.5f
         );
+    }
+
+    void OnEnable()
+    {
+        ResetScratch();
     }
 
     void Update()
@@ -61,7 +68,15 @@ public class FogScratch : MonoBehaviour
         }
     }
 
+    public void ResetScratch() // yo dilly, use this shit to reset the Fag
+    {
+        Array.Copy(originalPixels, pixels, pixels.Length);
+        clearedPixels = 0;
+        hasLastPoint = false;
 
+        clonedTexture.SetPixels32(pixels);
+        clonedTexture.Apply(false, false);
+    }
 
     private void TryScratchAtScreenPoint(Vector2 screenPoint)
     {
@@ -97,6 +112,15 @@ public class FogScratch : MonoBehaviour
         {
             clonedTexture.SetPixels32(pixels);
             clonedTexture.Apply(false, false);
+            CheckIfCleared();
+        }
+    }
+
+    private void CheckIfCleared()
+    {
+        if (ScratchedPercentage >= clearThreshold)
+        {
+            gameObject.SetActive(false);
         }
     }
 
@@ -137,4 +161,5 @@ public class FogScratch : MonoBehaviour
 
         return changedAny;
     }
+
 }
