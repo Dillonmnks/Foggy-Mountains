@@ -2,22 +2,9 @@ using UnityEngine;
 
 public class LaneBehaviour : MonoBehaviour
 {
-    [SerializeField] private float destroyZ = -10f;
-
-    void Update()
+    void FixedUpdate()
     {
         float speed = LaneManager.Instance.speed;
-        transform.Translate(Vector3.back * speed * Time.deltaTime);
-
-        if (transform.position.z < destroyZ)
-        {
-            if (EndlessLaneGenerator.Instance.listNotQueue.Contains(gameObject))
-            {
-                EndlessLaneGenerator.Instance.listNotQueue.Remove(gameObject);
-                Destroy(gameObject);
-            }
-                
-        }
-            
+        transform.position += Vector3.back * speed * Time.fixedDeltaTime;
     }
 }

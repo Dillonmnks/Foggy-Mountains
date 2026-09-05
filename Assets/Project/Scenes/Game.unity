@@ -359,7 +359,7 @@ MonoBehaviour:
   m_ObsoleteUseShadowQualitySettings: 0
   m_ObsoleteCustomShadowResolution: 512
   m_ObsoleteContactShadows: 0
---- !u!1 &558791758
+--- !u!1 &410732808
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -367,24 +367,37 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 558791762}
-  - component: {fileID: 558791761}
-  - component: {fileID: 558791760}
-  - component: {fileID: 558791759}
+  - component: {fileID: 410732813}
+  - component: {fileID: 410732812}
+  - component: {fileID: 410732811}
+  - component: {fileID: 410732810}
+  - component: {fileID: 410732809}
   m_Layer: 0
-  m_Name: playerTemp
-  m_TagString: Player
+  m_Name: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!65 &558791759
+--- !u!114 &410732809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 410732808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fcc4bb24ac83af4db00454214dbac67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Player
+--- !u!65 &410732810
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 558791758}
+  m_GameObject: {fileID: 410732808}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -399,13 +412,13 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!23 &558791760
+--- !u!23 &410732811
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 558791758}
+  m_GameObject: {fileID: 410732808}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -448,24 +461,24 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &558791761
+--- !u!33 &410732812
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 558791758}
+  m_GameObject: {fileID: 410732808}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!4 &558791762
+--- !u!4 &410732813
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 558791758}
+  m_GameObject: {fileID: 410732808}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.19859, y: 0.71, z: 0.5}
+  m_LocalPosition: {x: 3.2336, y: -0, z: 8.31654}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -531,11 +544,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bed7f4b1ee87de84c86b52932a77f0df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EndlessLaneGenerator
+  gameSpeed: 1
   lanePrefab: {fileID: 2584178576433794774, guid: f3945c66c599fd44da6f27c356e781e2, type: 3}
   obstaclePrefabs:
-  - {fileID: 558791758}
-  laneLength: 10
+  - {fileID: 9198087270559063166, guid: 01ba5a29eb3d74646a5b4867f42e939e, type: 3}
+  laneLength: 35
   lanesAhead: 5
+  activeLanes: []
+  poolSize: 6
 --- !u!4 &1674844150
 Transform:
   m_ObjectHideFlags: 0
@@ -871,4 +887,4 @@ SceneRoots:
   - {fileID: 1674844150}
   - {fileID: 2089635577}
   - {fileID: 1830982999}
-  - {fileID: 558791762}
+  - {fileID: 410732813}

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public Player Instance;
+    public static Player Instance;
 
     [Header("Stats")]
     public static string Name { get; private set; }
