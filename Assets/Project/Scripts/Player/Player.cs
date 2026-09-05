@@ -15,7 +15,8 @@ public class Player : MonoBehaviour
     public static int Lives { get; private set; }
     public static float Acceleration {  get; private set; }
 
-    public static event Action<Collision> OnPlayerCollision;
+    public static event Action<Collider> OnObstacleCollision;
+    public static event Action<Collider> OnCollect;
 
 
     private void Awake()
@@ -59,27 +60,34 @@ public class Player : MonoBehaviour
 
     public static void SetAcceleration(float amount) => Acceleration = amount;
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
         bool isObstacle = false;
         bool isCollectible = false;
 
-        if (collision.collider.tag == "Obstacle")
+        Collectible collectible = null;
+
+        if (other.tag == "Obstacle")
             isObstacle = true;
 
-        if (collision.collider.tag == "Collectible")
+        if (other.TryGetComponent<Collectible>(out collectible))
             isCollectible = true;
 
         if (isObstacle)
         {
             RemoveLife();
 
-            OnPlayerCollision?.Invoke(collision);
+            OnObstacleCollision?.Invoke(other);
         }
 
         if (isCollectible)
         {
+            OnCollect?.Invoke(other);
 
+            if(collectible != null)
+            {
+                collectible.OnCollect();
+            }
         }
     }
 }
