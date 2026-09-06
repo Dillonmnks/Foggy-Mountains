@@ -33,7 +33,7 @@ public class PlayerHealthManager : MonoBehaviour
         Player.OnObstacleCollision -= HandleObstacleHit;
     }
 
-    private void HandleObstacleHit(Collider other)
+    private void HandleObstacleHit()
     {
         RefreshHearts();
     }
