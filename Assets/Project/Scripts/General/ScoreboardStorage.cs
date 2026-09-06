@@ -30,31 +30,39 @@ public static class ScoreboardStorage
 
     public static List<ScoreEntryData> Load()
     {
-        if (!File.Exists(GetPath()))
-            return new List<ScoreEntryData>();
-
-        byte[] data = File.ReadAllBytes(GetPath());
-
-        for (int i = 0; i < data.Length; i++)
-            data[i] ^= KEY;
-
-        using var ms = new MemoryStream(data);
-        using var br = new BinaryReader(ms, Encoding.UTF8);
-
-        int count = br.ReadInt32();
-        var list = new List<ScoreEntryData>(count);
-
-        for (int i = 0; i < count; i++)
+        try
         {
-            list.Add(new ScoreEntryData
-            {
-                Name = br.ReadString(),
-                Score = br.ReadInt32(),
-                Position = br.ReadInt32()
-            });
-        }
+            if (!File.Exists(GetPath()))
+                return new List<ScoreEntryData>();
 
-        return list;
+            byte[] data = File.ReadAllBytes(GetPath());
+
+            for (int i = 0; i < data.Length; i++)
+                data[i] ^= KEY;
+
+            using var ms = new MemoryStream(data);
+            using var br = new BinaryReader(ms, Encoding.UTF8);
+
+            int count = br.ReadInt32();
+            var list = new List<ScoreEntryData>(count);
+
+            for (int i = 0; i < count; i++)
+            {
+                list.Add(new ScoreEntryData
+                {
+                    Name = br.ReadString(),
+                    Score = br.ReadInt32(),
+                    Position = br.ReadInt32()
+                });
+            }
+
+            return list;
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError("Scoreboard load failed: " + ex);
+            return new List<ScoreEntryData>(); // fallback
+        }
     }
 
     private static string GetPath()
