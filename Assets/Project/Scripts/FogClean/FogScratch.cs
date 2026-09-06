@@ -11,15 +11,21 @@ public class FogScratch : MonoBehaviour
     public float dragStepSize = 8f;
     [Range(0f, 1f)] public float clearThreshold = 0.8f;
 
+    [Header("Fog Regrowth")]
+    public float fogRegrowRate = 0.15f;
+    [Range(0f, 1f)] public float fogTickInterval = 0.1f;
+
     private Texture2D clonedTexture;
     private Image uiImage;
     private Color32[] pixels;
     private Color32[] originalPixels;
-    private static Color32 Clear32 = new Color32(0, 0, 0, 0);
 
     private int width, height, totalPixels, clearedPixels;
     private bool hasLastPoint;
     private Vector2 lastLocalPoint;
+    private float fogTickTimer;
+
+    private int fogRegionMinX, fogRegionMaxX, fogRegionMinY, fogRegionMaxY;
 
     public float ScratchedPercentage => totalPixels == 0 ? 0f : (float)clearedPixels / totalPixels;
 
@@ -28,7 +34,7 @@ public class FogScratch : MonoBehaviour
         uiImage = GetComponent<Image>();
         clonedTexture = Instantiate(baseTexture);
 
-        width = clonedTexture.width;
+        width = clonedTexture.width; 
         height = clonedTexture.height;
         totalPixels = width * height;
 
@@ -51,33 +57,47 @@ public class FogScratch : MonoBehaviour
     void Update()
     {
         var mouse = Mouse.current;
-        if (mouse == null) return;
-
-        if (mouse.leftButton.wasPressedThisFrame)
+        if (mouse != null)
         {
-            hasLastPoint = false;
+            if (mouse.leftButton.wasPressedThisFrame)
+            {
+                hasLastPoint = false;
+            }
+
+            if (mouse.leftButton.isPressed)
+            {
+                TryScratchAtScreenPoint(mouse.position.ReadValue());
+            }
+            else
+            {
+                hasLastPoint = false;
+            }
         }
 
-        if (mouse.leftButton.isPressed)
+        fogTickTimer += Time.deltaTime;
+        if (fogTickTimer >= fogTickInterval)
         {
-            TryScratchAtScreenPoint(mouse.position.ReadValue());
-        }
-        else
-        {
-            hasLastPoint = false;
+            fogTickTimer = 0f;
+            FogBackUpTick();
         }
     }
 
-    public void ResetScratch() // yo dilly, use this shit to reset the Fag
+    public void ResetScratch()
     {
         Array.Copy(originalPixels, pixels, pixels.Length);
         clearedPixels = 0;
         hasLastPoint = false;
+        fogTickTimer = 0f;
+
+        fogRegionMinX = width;
+        fogRegionMaxX = -1;
+        fogRegionMinY = height;
+        fogRegionMaxY = -1;
 
         clonedTexture.SetPixels32(pixels);
         clonedTexture.Apply(false, false);
     }
-
+    
     private void TryScratchAtScreenPoint(Vector2 screenPoint)
     {
         if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(
@@ -152,14 +172,55 @@ public class FogScratch : MonoBehaviour
                 int index = rowOffset + x;
                 if (pixels[index].a != 0)
                 {
-                    pixels[index] = Clear32;
+                    pixels[index].a = 0;
                     clearedPixels++;
                     changedAny = true;
                 }
             }
         }
 
+        if (changedAny)
+        {
+            fogRegionMinX = Mathf.Min(fogRegionMinX, minX);
+            fogRegionMaxX = Mathf.Max(fogRegionMaxX, maxX);
+            fogRegionMinY = Mathf.Min(fogRegionMinY, minY);
+            fogRegionMaxY = Mathf.Max(fogRegionMaxY, maxY);
+        }
+
         return changedAny;
     }
 
+    private void FogBackUpTick()
+    {
+        if (fogRegionMaxX < fogRegionMinX) return;
+
+        byte step = (byte)Mathf.Max(1, Mathf.RoundToInt(fogRegrowRate * 255f * fogTickInterval));
+        bool changed = false;
+
+        for (int y = fogRegionMinY; y <= fogRegionMaxY; y++)
+        {
+            int rowOffset = y * width;
+            for (int x = fogRegionMinX; x <= fogRegionMaxX; x++)
+            {
+                int index = rowOffset + x;
+                byte target = originalPixels[index].a;
+                byte current = pixels[index].a;
+                if (current >= target) continue;
+
+                if (current == 0)
+                {
+                    clearedPixels--;
+                }
+
+                pixels[index].a = (byte)Mathf.Min(target, current + step);
+                changed = true;
+            }
+        }
+
+        if (changed)
+        {
+            clonedTexture.SetPixels32(pixels);
+            clonedTexture.Apply(false, false);
+        }
+    }
 }
