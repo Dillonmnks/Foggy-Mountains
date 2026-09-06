@@ -12,7 +12,7 @@ public class MyCamera : MonoBehaviour
         Player.OnObstacleCollision -= Wobble;
     }
 
-    public void Wobble(Collider other)
+    public void Wobble()
     {
         //Apply wobble logic here
 
