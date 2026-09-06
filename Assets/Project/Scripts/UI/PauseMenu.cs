@@ -3,11 +3,15 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
-    public void OnEnable()
+    private void Start()
+    {
+        PlayerInput.Instance.OnEsc += HandleEsc;
+        gameObject.SetActive(false);
+    }
+
+    private void OnEnable()
     {
         Time.timeScale = 0f;
-
-        PlayerInput.Instance.OnEsc += HandleEsc;
     }
 
     private void OnDisable()
@@ -18,7 +22,7 @@ public class PauseMenu : MonoBehaviour
     private void HandleEsc(bool pressed)
     {
         if (!pressed) return;
-
+        
         gameObject.SetActive(!gameObject.activeSelf);
     }
 

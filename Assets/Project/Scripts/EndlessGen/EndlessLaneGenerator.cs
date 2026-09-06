@@ -6,8 +6,6 @@ using UnityEngine;
 
 public class EndlessLaneGenerator : MonoBehaviour
 {
-    public float gameSpeed;
-
     public GameObject lanePrefab;
     public GameObject[] obstaclePrefabs;
     public GameObject[] collectiblePrefabs;
@@ -42,8 +40,6 @@ public class EndlessLaneGenerator : MonoBehaviour
 
     private void Update()
     {
-        Time.timeScale = gameSpeed;
-
         UpdateLanes();
     }
 
