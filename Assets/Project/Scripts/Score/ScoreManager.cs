@@ -16,6 +16,10 @@ public class ScoreManager : MonoBehaviour
     private float tickTimer;
     private int nextMilestone = 100;
 
+    public float minSpeed = 20f;
+    public float maxSpeed = 100f;
+    public float maxSpeedMultiplier = 3f;
+
     void Awake()
     {
         Instance = this;
@@ -39,10 +43,14 @@ public class ScoreManager : MonoBehaviour
 
     private void AwardDistanceTick()
     {
-        int points = Mathf.FloorToInt(distanceSinceLastTick * pointsPerMeter);
+        float speedT = Mathf.InverseLerp(minSpeed, maxSpeed, LaneManager.Instance.speed);
+        float multiplier = Mathf.Lerp(1f, maxSpeedMultiplier, speedT);
+        float effectiveRate = pointsPerMeter * multiplier;
+
+        int points = Mathf.FloorToInt(distanceSinceLastTick * effectiveRate);
         if (points > 0)
         {
-            distanceSinceLastTick -= points / pointsPerMeter;
+            distanceSinceLastTick -= points / effectiveRate;
             AddPoints(points);
         }
     }
