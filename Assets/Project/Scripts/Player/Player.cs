@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -15,8 +16,8 @@ public class Player : MonoBehaviour
     public static int Lives { get; private set; }
     public static float Acceleration {  get; private set; }
 
-    public static event Action<Collider> OnObstacleCollision;
-    public static event Action<Collider> OnCollect;
+    public static event Action OnObstacleCollision;
+    public static event Action OnCollect;
     public static event Action OnPlayerDeath;
 
 
@@ -34,11 +35,13 @@ public class Player : MonoBehaviour
     private void OnEnable()
     {
         OnPlayerDeath += SaveScore;
+        OnObstacleCollision += RemoveLife;
     }
 
     private void OnDisable()
     {
         OnPlayerDeath -= SaveScore;
+        OnObstacleCollision -= RemoveLife;
     }
 
     public static void SetName(string name) => Name = name;
@@ -70,6 +73,8 @@ public class Player : MonoBehaviour
     {
         Lives = Mathf.Max(Lives - 1, 0);
 
+        Debug.Log("Player Health: " +  Lives);
+
         if(Lives <= 0)
             OnPlayerDeath?.Invoke();
     }
@@ -92,14 +97,12 @@ public class Player : MonoBehaviour
 
         if (isObstacle)
         {
-            RemoveLife();
-
-            OnObstacleCollision?.Invoke(other);
+            OnObstacleCollision?.Invoke();
         }
 
         if (isCollectible)
         {
-            OnCollect?.Invoke(other);
+            OnCollect?.Invoke();
 
             if(collectible != null)
             {
@@ -110,6 +113,8 @@ public class Player : MonoBehaviour
 
     public void SaveScore()
     {
+        Debug.Log("YOU DIED");
+
         var Scores = ScoreboardStorage.Load();
 
         Scores.Add(new ScoreEntryData
@@ -126,5 +131,7 @@ public class Player : MonoBehaviour
             Scores[i].Position = i + 1;
 
         ScoreboardStorage.Save(Scores);
+
+        SceneManager.LoadScene("MainMenu");
     }
 }
