@@ -1459,8 +1459,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScoreDisplay
   scoreText: {fileID: 839520889}
-  popupPrefab: {fileID: 0}
-  popupSpawnPoint: {fileID: 0}
   countDuration: 0.4
   countEase:
     serializedVersion: 2
@@ -1578,7 +1576,7 @@ MonoBehaviour:
   mapPrefab: {fileID: 6633364820525014584, guid: 0ac7424b9d303964098ab2b0960f73d1, type: 3}
   startPos: {fileID: 1646300802}
   endPos: {fileID: 50570536}
-  speed: 0.5
+  speed: 8
   mapLength: 450
   mapsAhead: 4
   poolSize: 8

@@ -43,7 +43,7 @@ public class MapMover : MonoBehaviour
         Vector3 dir = GetDirection();
 
         foreach (var map in activeMaps)
-            map.transform.position += dir * speed * Time.fixedDeltaTime;
+            map.transform.position += dir * LaneManager.Instance.GetSpeed() * Time.fixedDeltaTime;
     }
 
     private Vector3 GetDirection()
@@ -83,4 +83,7 @@ public class MapMover : MonoBehaviour
             mapPool.Enqueue(first);
         }
     }
+
+
+
 }
