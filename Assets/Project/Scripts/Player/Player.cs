@@ -36,6 +36,13 @@ public class Player : MonoBehaviour
     {
         OnPlayerDeath += SaveScore;
         OnObstacleCollision += RemoveLife;
+
+        Name = GameManager.Name;
+
+        if (Name == "")
+            Name = "BOB";
+
+        Points = 0;
     }
 
     private void OnDisable()
@@ -119,7 +126,7 @@ public class Player : MonoBehaviour
 
         Scores.Add(new ScoreEntryData
         {
-            Name = name,
+            Name = Name,
             Score = Points,
             Position = Scores.Count + 1
         });
