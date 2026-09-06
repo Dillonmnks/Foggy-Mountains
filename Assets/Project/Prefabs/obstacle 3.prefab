@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7351681497392157902}
   - component: {fileID: 3202550776871513695}
   m_Layer: 0
-  m_Name: obstacle
+  m_Name: obstacle 3
   m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -106,6 +106,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 849e427d3fb87d246893c173ad316c65, type: 2}
+    - target: {fileID: -5754084199372789682, guid: 828ea5927ae0f0449a9ce2703733f139, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: -6352268814275021742, guid: 76ae520de663bf043a5f592d2b23bb60, type: 3}
     - target: {fileID: 919132149155446097, guid: 828ea5927ae0f0449a9ce2703733f139, type: 3}
       propertyPath: m_Name
       value: Tree_Winter_009

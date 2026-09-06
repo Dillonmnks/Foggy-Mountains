@@ -8,48 +8,79 @@ public class MapMover : MonoBehaviour
     [SerializeField] private Transform endPos;
     [SerializeField] private float speed;
     [SerializeField] private float mapLength;
+    [SerializeField] private int mapsAhead = 4;
+    [SerializeField] private int poolSize = 8;
+    [SerializeField] private bool reverseDirection;
 
+    private Queue<GameObject> mapPool = new();
     private List<GameObject> activeMaps = new();
 
     private void Start()
     {
-        activeMaps.Add(Instantiate(mapPrefab, startPos.position, Quaternion.identity));
+        CreatePool();
+        SpawnMaps();
     }
-
 
     private void FixedUpdate()
     {
-        MoveMap(); // noice
-        CheckMap(); // noice
-        DeleteMap(); // noice
+        MoveMaps();
+        DeleteMap();
+        SpawnMaps();
     }
 
-    private void MoveMap()
+    private void CreatePool()
     {
-        Vector3 dir = (startPos.position - endPos.position).normalized;
+        for (int i = 0; i < poolSize; i++)
+        {
+            GameObject go = Instantiate(mapPrefab);
+            go.SetActive(false);
+            mapPool.Enqueue(go);
+        }
+    }
 
-        foreach (var map in activeMaps) 
+    private void MoveMaps()
+    {
+        Vector3 dir = GetDirection();
+
+        foreach (var map in activeMaps)
             map.transform.position += dir * speed * Time.fixedDeltaTime;
     }
 
-    private void CheckMap()
+    private Vector3 GetDirection()
     {
-        GameObject last = activeMaps[activeMaps.Count - 1];
-        if (Vector3.Distance(startPos.position, last.transform.position) >= mapLength)
-            activeMaps.Add(Instantiate(mapPrefab, startPos.position, Quaternion.identity));
+        Vector3 dir = (endPos.position - startPos.position).normalized;
+        return reverseDirection ? -dir : dir;
+    }
+
+    private void SpawnMaps()
+    {
+        Vector3 dir = GetDirection();
+
+        while (activeMaps.Count < mapsAhead)
+        {
+            Vector3 pos = activeMaps.Count == 0
+                ? startPos.position
+                : activeMaps[^1].transform.position - dir * mapLength;
+
+            GameObject map = mapPool.Count > 0 ? mapPool.Dequeue() : Instantiate(mapPrefab);
+            map.transform.position = pos;
+            map.SetActive(true);
+
+            activeMaps.Add(map);
+        }
     }
 
     private void DeleteMap()
     {
+        if (activeMaps.Count == 0) return;
+
         GameObject first = activeMaps[0];
 
-        if(Vector3.Distance(first.transform.position, endPos.position) < 0.5f)
+        if (Vector3.Distance(first.transform.position, endPos.position) < 0.5f)
         {
             activeMaps.RemoveAt(0);
-            Destroy(first);
+            first.SetActive(false);
+            mapPool.Enqueue(first);
         }
     }
-
 }
-
-
