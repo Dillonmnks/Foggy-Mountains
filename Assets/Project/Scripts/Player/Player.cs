@@ -17,6 +17,7 @@ public class Player : MonoBehaviour
 
     public static event Action<Collider> OnObstacleCollision;
     public static event Action<Collider> OnCollect;
+    public static event Action OnPlayerDeath;
 
 
     private void Awake()
@@ -28,6 +29,16 @@ public class Player : MonoBehaviour
         }
 
         Instance = this;
+    }
+
+    private void OnEnable()
+    {
+        OnPlayerDeath += SaveScore;
+    }
+
+    private void OnDisable()
+    {
+        OnPlayerDeath -= SaveScore;
     }
 
     public static void SetName(string name) => Name = name;
@@ -55,8 +66,14 @@ public class Player : MonoBehaviour
     //Add/Remove 1 of each
     public static void AddLife() => Lives = Mathf.Min(Lives + 1, MaxLives);
     public static void AddMaxLife() => MaxLives++;
-    public static void RemoveLife() => Lives = Mathf.Max(Lives - 1, 0);
-    public static void RemoveMaxLife() => MaxLives = Mathf.Max(MaxLives - 1, 0);
+    public static void RemoveLife()
+    {
+        Lives = Mathf.Max(Lives - 1, 0);
+
+        if(Lives <= 0)
+            OnPlayerDeath?.Invoke();
+    }
+    public static void RemoveMaxLife() => MaxLives = Mathf.Max(MaxLives - 1, 1);
 
     public static void SetAcceleration(float amount) => Acceleration = amount;
 
@@ -89,5 +106,25 @@ public class Player : MonoBehaviour
                 collectible.OnCollect();
             }
         }
+    }
+
+    public void SaveScore()
+    {
+        var Scores = ScoreboardStorage.Load();
+
+        Scores.Add(new ScoreEntryData
+        {
+            Name = name,
+            Score = Points,
+            Position = Scores.Count + 1
+        });
+
+
+        Scores.Sort((a, b) => b.Score.CompareTo(a.Score));
+
+        for (int i = 0; i < Scores.Count; i++)
+            Scores[i].Position = i + 1;
+
+        ScoreboardStorage.Save(Scores);
     }
 }
