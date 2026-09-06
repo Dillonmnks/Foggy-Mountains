@@ -6,7 +6,7 @@ public class Skruf : Collectible
     {
         base.OnCollect();
 
-        Player.AddLife();
+        ScoreManager.Instance.AddPoints((int)(ScoreManager.Instance.TotalPoints * 0.2f));
 
         Debug.Log("Skruf collected");
     }

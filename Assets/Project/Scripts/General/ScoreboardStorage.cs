@@ -7,8 +7,16 @@ public static class ScoreboardStorage
 {
     private const byte KEY = 0x5A;
 
+    private static readonly string[] SpecialNames = { "DZO", "Legionaire" };
+
     public static void Save(List<ScoreEntryData> scores)
     {
+        EnsureSpecialEntries(scores);
+
+        SortScores(scores);
+
+        AssignPositions(scores);
+
         using var ms = new MemoryStream();
         using var bw = new BinaryWriter(ms, Encoding.UTF8);
 
@@ -33,7 +41,7 @@ public static class ScoreboardStorage
         try
         {
             if (!File.Exists(GetPath()))
-                return new List<ScoreEntryData>();
+                return CreateDefaultScoreboard();
 
             byte[] data = File.ReadAllBytes(GetPath());
 
@@ -56,13 +64,99 @@ public static class ScoreboardStorage
                 });
             }
 
+            EnsureSpecialEntries(list);
+
+            SortScores(list);
+
+            AssignPositions(list);
+
             return list;
         }
         catch (System.Exception ex)
         {
             Debug.LogError("Scoreboard load failed: " + ex);
-            return new List<ScoreEntryData>(); // fallback
+            return CreateDefaultScoreboard();
         }
+    }
+
+    private static List<ScoreEntryData> CreateDefaultScoreboard()
+    {
+        var list = new List<ScoreEntryData>();
+        EnsureSpecialEntries(list);
+        SortScores(list);
+        AssignPositions(list);
+        return list;
+    }
+
+    private static void EnsureSpecialEntries(List<ScoreEntryData> scores)
+    {
+        // Find highest NON-special score
+        int highestNormalScore = 0;
+
+        foreach (var s in scores)
+        {
+            if (!IsSpecial(s.Name))
+                highestNormalScore = Mathf.Max(highestNormalScore, s.Score);
+        }
+
+        // Generate special scores
+        int dzoScore = highestNormalScore + UnityEngine.Random.Range(0, 1001);
+        int legScore = highestNormalScore + UnityEngine.Random.Range(0, 1001);
+
+        // Ensure DZO exists
+        var dzo = scores.Find(s => s.Name == "DZO");
+        if (dzo == null)
+        {
+            scores.Add(new ScoreEntryData
+            {
+                Name = "DZO",
+                Score = dzoScore
+            });
+        }
+        else
+        {
+            dzo.Score = dzoScore;
+        }
+
+        // Ensure Legionaire exists
+        var leg = scores.Find(s => s.Name == "Legionaire");
+        if (leg == null)
+        {
+            scores.Add(new ScoreEntryData
+            {
+                Name = "Legionaire",
+                Score = legScore
+            });
+        }
+        else
+        {
+            leg.Score = legScore;
+        }
+    }
+
+    private static bool IsSpecial(string name)
+    {
+        return name == "DZO" || name == "Legionaire";
+    }
+
+    private static void SortScores(List<ScoreEntryData> scores)
+    {
+        scores.Sort((a, b) =>
+        {
+            bool aSpecial = IsSpecial(a.Name);
+            bool bSpecial = IsSpecial(b.Name);
+
+            if (aSpecial && !bSpecial) return -1;
+            if (!aSpecial && bSpecial) return 1;
+
+            return b.Score.CompareTo(a.Score);
+        });
+    }
+
+    private static void AssignPositions(List<ScoreEntryData> scores)
+    {
+        for (int i = 0; i < scores.Count; i++)
+            scores[i].Position = i + 1;
     }
 
     private static string GetPath()

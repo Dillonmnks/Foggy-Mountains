@@ -1149,7 +1149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8ae0a3df7a41c94fb6bf5d125dff500, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Cigarettes
-  SpawnWeight: 10
+  SpawnWeight: 16
 --- !u!1 &8508011494189650916
 GameObject:
   m_ObjectHideFlags: 0

@@ -46,17 +46,15 @@ public class Player : MonoBehaviour
 
         Name = GameManager.Instance.Name.Trim().Replace("\u200B", "");
 
-        if (Name == "JQX")
+        OnObstacleCollision += RemoveLife;
+
+        if(Name == "DZO")
         {
-            Debug.Log("Is Unkillable");
-            Unkillable = true;
+            Name = "FAKE DZO";
         }
 
-        else
-            OnObstacleCollision += RemoveLife;
-
         if (Name == "")
-            Name = "BOB";
+            Name = "NO NAME";
     }
 
     private void OnDisable()
