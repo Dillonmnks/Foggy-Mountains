@@ -75,8 +75,9 @@ public class MapMover : MonoBehaviour
         if (activeMaps.Count == 0) return;
 
         GameObject first = activeMaps[0];
+        Vector3 dir = GetDirection();
 
-        if (Vector3.Distance(first.transform.position, endPos.position) < 0.5f)
+        if (Vector3.Dot(first.transform.position - endPos.position, dir) >= 0f)
         {
             activeMaps.RemoveAt(0);
             first.SetActive(false);
