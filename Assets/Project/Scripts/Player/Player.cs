@@ -1,8 +1,9 @@
+using System;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public Player Instance;
+    public static Player Instance;
 
     [Header("Stats")]
     public static string Name { get; private set; }
@@ -13,6 +14,9 @@ public class Player : MonoBehaviour
     public static int MaxLives { get; private set; }
     public static int Lives { get; private set; }
     public static float Acceleration {  get; private set; }
+
+    public static event Action<Collider> OnObstacleCollision;
+    public static event Action<Collider> OnCollect;
 
 
     private void Awake()
@@ -55,4 +59,35 @@ public class Player : MonoBehaviour
     public static void RemoveMaxLife() => MaxLives = Mathf.Max(MaxLives - 1, 0);
 
     public static void SetAcceleration(float amount) => Acceleration = amount;
+
+    private void OnTriggerEnter(Collider other)
+    {
+        bool isObstacle = false;
+        bool isCollectible = false;
+
+        Collectible collectible = null;
+
+        if (other.tag == "Obstacle")
+            isObstacle = true;
+
+        if (other.TryGetComponent<Collectible>(out collectible))
+            isCollectible = true;
+
+        if (isObstacle)
+        {
+            RemoveLife();
+
+            OnObstacleCollision?.Invoke(other);
+        }
+
+        if (isCollectible)
+        {
+            OnCollect?.Invoke(other);
+
+            if(collectible != null)
+            {
+                collectible.OnCollect();
+            }
+        }
+    }
 }

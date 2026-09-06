@@ -24,7 +24,6 @@ public class PlayerInput : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject);
 
         inputActions = new MyInputActions();
     }
