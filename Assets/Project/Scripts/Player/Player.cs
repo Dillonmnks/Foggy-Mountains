@@ -73,6 +73,7 @@ public class Player : MonoBehaviour
 
         Debug.Log("Player Health: " +  Lives);
 
+
         if(Lives <= 0)
             OnPlayerDeath?.Invoke();
     }
