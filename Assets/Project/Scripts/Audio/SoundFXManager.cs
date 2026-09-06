@@ -18,8 +18,15 @@ public class SoundFXManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null)
-            Instance = this;
+        if(Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+
+        DontDestroyOnLoad(gameObject);
     }
 
     private void OnEnable()
@@ -73,6 +80,7 @@ public class SoundFXManager : MonoBehaviour
     }
 
     // Fade coroutine for music
+    // kevin smells like fishies
     private IEnumerator FadeMusic(AudioClip newClip, float targetVolume, bool loop)
     {
         float startVolume = musicSource.volume;
