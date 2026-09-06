@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -15,8 +16,9 @@ public class Player : MonoBehaviour
     public static int Lives { get; private set; }
     public static float Acceleration {  get; private set; }
 
-    public static event Action<Collider> OnObstacleCollision;
-    public static event Action<Collider> OnCollect;
+    public static event Action OnObstacleCollision;
+    public static event Action OnCollect;
+    public static event Action OnPlayerDeath;
 
 
     private void Awake()
@@ -28,6 +30,25 @@ public class Player : MonoBehaviour
         }
 
         Instance = this;
+    }
+
+    private void OnEnable()
+    {
+        OnPlayerDeath += SaveScore;
+        OnObstacleCollision += RemoveLife;
+
+        Name = GameManager.Name;
+
+        if (Name == "")
+            Name = "BOB";
+
+        Points = 0;
+    }
+
+    private void OnDisable()
+    {
+        OnPlayerDeath -= SaveScore;
+        OnObstacleCollision -= RemoveLife;
     }
 
     public static void SetName(string name) => Name = name;
@@ -55,8 +76,16 @@ public class Player : MonoBehaviour
     //Add/Remove 1 of each
     public static void AddLife() => Lives = Mathf.Min(Lives + 1, MaxLives);
     public static void AddMaxLife() => MaxLives++;
-    public static void RemoveLife() => Lives = Mathf.Max(Lives - 1, 0);
-    public static void RemoveMaxLife() => MaxLives = Mathf.Max(MaxLives - 1, 0);
+    public static void RemoveLife()
+    {
+        Lives = Mathf.Max(Lives - 1, 0);
+
+        Debug.Log("Player Health: " +  Lives);
+
+        if(Lives <= 0)
+            OnPlayerDeath?.Invoke();
+    }
+    public static void RemoveMaxLife() => MaxLives = Mathf.Max(MaxLives - 1, 1);
 
     public static void SetAcceleration(float amount) => Acceleration = amount;
 
@@ -75,19 +104,41 @@ public class Player : MonoBehaviour
 
         if (isObstacle)
         {
-            RemoveLife();
-
-            OnObstacleCollision?.Invoke(other);
+            OnObstacleCollision?.Invoke();
         }
 
         if (isCollectible)
         {
-            OnCollect?.Invoke(other);
+            OnCollect?.Invoke();
 
             if(collectible != null)
             {
                 collectible.OnCollect();
             }
         }
+    }
+
+    public void SaveScore()
+    {
+        Debug.Log("YOU DIED");
+
+        var Scores = ScoreboardStorage.Load();
+
+        Scores.Add(new ScoreEntryData
+        {
+            Name = Name,
+            Score = Points,
+            Position = Scores.Count + 1
+        });
+
+
+        Scores.Sort((a, b) => b.Score.CompareTo(a.Score));
+
+        for (int i = 0; i < Scores.Count; i++)
+            Scores[i].Position = i + 1;
+
+        ScoreboardStorage.Save(Scores);
+
+        SceneManager.LoadScene("MainMenu");
     }
 }

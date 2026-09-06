@@ -1105,9 +1105,9 @@ MonoBehaviour:
   - {fileID: 5001237145132338356, guid: 0fa958c22d1039f4aa8911c222f86d91, type: 3}
   laneLength: 35
   lanesAhead: 5
-  collectibleSpawnChance: 0.05
+  collectibleSpawnChance: 0.1
   activeLanes: []
-  poolSize: 10
+  poolSize: 6
 --- !u!4 &1674844150
 Transform:
   m_ObjectHideFlags: 0
