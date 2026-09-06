@@ -15,6 +15,9 @@ public class FogScratch : MonoBehaviour
     public float fogRegrowRate = 0.15f;
     [Range(0f, 1f)] public float fogTickInterval = 0.1f;
 
+    [Header("Ambient Fog")]
+    public float ambientFogRate = 0.05f;
+
     private Texture2D clonedTexture;
     private Image uiImage;
     private Color32[] pixels;
@@ -24,6 +27,7 @@ public class FogScratch : MonoBehaviour
     private bool hasLastPoint;
     private Vector2 lastLocalPoint;
     private float fogTickTimer;
+    private float ambientFogLevel;
 
     private int fogRegionMinX, fogRegionMaxX, fogRegionMinY, fogRegionMaxY;
 
@@ -34,7 +38,7 @@ public class FogScratch : MonoBehaviour
         uiImage = GetComponent<Image>();
         clonedTexture = Instantiate(baseTexture);
 
-        width = clonedTexture.width; 
+        width = clonedTexture.width;
         height = clonedTexture.height;
         totalPixels = width * height;
 
@@ -80,6 +84,12 @@ public class FogScratch : MonoBehaviour
             fogTickTimer = 0f;
             FogBackUpTick();
         }
+
+        if (ambientFogLevel < 1f)
+        {
+            ambientFogLevel = Mathf.Min(1f, ambientFogLevel + ambientFogRate * Time.deltaTime);
+            ApplyAmbientFog();
+        }
     }
 
     public void ResetScratch()
@@ -94,10 +104,20 @@ public class FogScratch : MonoBehaviour
         fogRegionMinY = height;
         fogRegionMaxY = -1;
 
+        ambientFogLevel = 0f;
+        ApplyAmbientFog();
+
         clonedTexture.SetPixels32(pixels);
         clonedTexture.Apply(false, false);
     }
-    
+
+    private void ApplyAmbientFog()
+    {
+        Color c = uiImage.color;
+        c.a = ambientFogLevel;
+        uiImage.color = c;
+    }
+
     private void TryScratchAtScreenPoint(Vector2 screenPoint)
     {
         if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(
