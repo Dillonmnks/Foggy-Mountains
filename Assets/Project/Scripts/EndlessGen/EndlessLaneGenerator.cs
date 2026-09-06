@@ -21,6 +21,10 @@ public class EndlessLaneGenerator : MonoBehaviour
 
     public int poolSize = 10;
 
+    public int safeLaneCount = 3;
+    private int lanesSpawnedTotal = 0;
+
+
     public static EndlessLaneGenerator Instance;
 
     private void Awake()
@@ -79,7 +83,7 @@ public class EndlessLaneGenerator : MonoBehaviour
 
     public void SpawnLane()
     {
-        while(activeLanes.Count < lanesAhead)
+        while (activeLanes.Count < lanesAhead)
         {
             float zPos = activeLanes.Count == 0 ? Player.Instance.transform.position.z : activeLanes[^1].transform.position.z + laneLength;
 
@@ -90,8 +94,9 @@ public class EndlessLaneGenerator : MonoBehaviour
             lane.Activate(pos);
 
             activeLanes.Add(lane);
+            lanesSpawnedTotal++;
 
-            if (obstaclePrefabs.Length > 0)
+            if (obstaclePrefabs.Length > 0 && lanesSpawnedTotal > safeLaneCount)
                 PlaceObstacle(lane.gameObject, obstaclePrefabs[Random.Range(0, obstaclePrefabs.Length)]);
         }
     }
