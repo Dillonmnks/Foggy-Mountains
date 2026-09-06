@@ -7,42 +7,17 @@ public class PlayerHealthManager : MonoBehaviour
 
     public Image[] hearts = new Image[3];
 
-    private void Awake()
+    private void Update()
     {
-        if (Instance != null && Instance != this)
+        for(int i = 0; i < hearts.Length; i++)
         {
-            Destroy(gameObject);
-            return;
-        }
+            if(Player.Lives - 1 >= i)
+            {
+                continue;
+            }
 
-        Instance = this;
-    }
-
-    private void OnEnable()
-    {
-        Player.OnObstacleCollision += HandleObstacleHit;
-        
-    }
-    private void Start()
-    {
-        RefreshHearts();
-    }
-
-    private void OnDisable()
-    {
-        Player.OnObstacleCollision -= HandleObstacleHit;
-    }
-
-    private void HandleObstacleHit()
-    {
-        RefreshHearts();
-    }
-
-    public void RefreshHearts()
-    {
-        for (int i = 0; i < hearts.Length; i++)
-        {
-            hearts[i].enabled = i + 1 < Player.Lives;
+            if (hearts[i].isActiveAndEnabled)
+                hearts[i].enabled = false;
         }
     }
 }

@@ -18,6 +18,8 @@ public class Player : MonoBehaviour
     public static event Action OnCollect;
     public static event Action OnPlayerDeath;
 
+    public bool Unkillable = false;
+
 
     private void Awake()
     {
@@ -33,12 +35,25 @@ public class Player : MonoBehaviour
         MaxLives = 3;
     }
 
+    private void Update()
+    {
+        Debug.Log("Lives: " + Lives);
+    }
+
     private void OnEnable()
     {
         OnPlayerDeath += SaveScore;
-        OnObstacleCollision += RemoveLife;
 
-        Name = GameManager.Instance.Name;
+        Name = GameManager.Instance.Name.Trim().Replace("\u200B", "");
+
+        if (Name == "JQX")
+        {
+            Debug.Log("Is Unkillable");
+            Unkillable = true;
+        }
+
+        else
+            OnObstacleCollision += RemoveLife;
 
         if (Name == "")
             Name = "BOB";

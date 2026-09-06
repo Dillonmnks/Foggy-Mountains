@@ -4,8 +4,11 @@ public class PlayerController : MonoBehaviour
 {
     public Lane CurrentLane = Lane.Middle;
 
-    private bool canGoLeft;
-    private bool canGoRight;
+    private bool isSwitchingLane = false;
+    private float laneSwitchDuration = 0.05f;
+    private float laneSwitchTimer = 0f;
+
+    private Lane targetLane;
 
     public enum Lane
     {
@@ -28,73 +31,61 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        switch (CurrentLane)
+        if (isSwitchingLane)
         {
-            case Lane.Left:
-                canGoLeft = false;
-                canGoRight = true;
-                break;
-            case Lane.Middle:
-                canGoLeft = true;
-                canGoRight = true;
-                break;
-            case Lane.Right:
-                canGoLeft = true;
-                canGoRight = false;
-                break;
+            laneSwitchTimer += Time.deltaTime;
+
+            float t = laneSwitchTimer / laneSwitchDuration;
+
+            float newX = Mathf.Lerp(
+                LaneManager.LaneX[(int)CurrentLane],
+                LaneManager.LaneX[(int)targetLane],
+                t
+            );
+
+            transform.position = new Vector3(newX, transform.position.y, transform.position.z);
+
+            if (t >= 1f)
+            {
+                CurrentLane = targetLane;
+                isSwitchingLane = false;
+            }
         }
-    }
-
-    private void UpdateLocation()
-    {
-        float newX = LaneManager.LaneX[(int)CurrentLane];
-
-        transform.position = new Vector3(newX, transform.position.y, transform.position.z);
     }
 
     private void HandleLeft(bool pressed)
     {
-        if (!pressed)
+        if (!pressed || Time.timeScale == 0f)
             return;
 
-        if(canGoLeft)
-        {
-            GoLeft();
-        }
-    }
-
-    private void GoLeft()
-    {
-        if(CurrentLane == Lane.Middle)
-        {
-            CurrentLane = Lane.Left;
-            UpdateLocation();
+        if (isSwitchingLane)
             return;
-        }
 
-        CurrentLane = Lane.Middle;
-        UpdateLocation();
+        if (CurrentLane == Lane.Left)
+            return;
+
+        targetLane = (CurrentLane == Lane.Middle) ? Lane.Left : Lane.Middle;
+        StartLaneSwitch();
     }
 
     private void HandleRight(bool pressed)
     {
-        if (!pressed)
+        if (!pressed || Time.timeScale == 0f)
             return;
 
-        if (canGoRight)
-            GoRight();
+        if (isSwitchingLane)
+            return;
+
+        if (CurrentLane == Lane.Right)
+            return;
+
+        targetLane = (CurrentLane == Lane.Middle) ? Lane.Right : Lane.Middle;
+        StartLaneSwitch();
     }
 
-    private void GoRight()
+    private void StartLaneSwitch()
     {
-        if(CurrentLane == Lane.Middle)
-        {
-            CurrentLane = Lane.Right;
-            UpdateLocation();
-            return;
-        }
-
-        CurrentLane = Lane.Middle;
-        UpdateLocation();
+        isSwitchingLane = true;
+        laneSwitchTimer = 0f;
     }
 }
