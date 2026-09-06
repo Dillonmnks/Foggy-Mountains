@@ -18,7 +18,7 @@ public class SoundFXManager : MonoBehaviour
 
     private void Awake()
     {
-        if(Instance != null && Instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
@@ -43,6 +43,7 @@ public class SoundFXManager : MonoBehaviour
 
     private float GetSFXVolume() => VolumeManager.Instance != null ? VolumeManager.Instance.GetCurrentSFXVolume : 1f;
     private float GetMusicVolume() => VolumeManager.Instance != null ? VolumeManager.Instance.GetCurrentMusicVolume : 1f;
+    private float GetAmbienceVolume() => VolumeManager.Instance != null ? VolumeManager.Instance.GetCurrentAmbienceVolume : 1f;
 
     // Called whenever a slider in VolumeManager changes, so currently playing sounds react immediately
     private void UpdateAllVolumes()
@@ -51,7 +52,7 @@ public class SoundFXManager : MonoBehaviour
             musicSource.volume = musicBaseVolume * GetMusicVolume();
 
         if (ambientSource != null && ambientSource.isPlaying)
-            ambientSource.volume = ambientBaseVolume * GetMusicVolume();
+            ambientSource.volume = ambientBaseVolume * GetAmbienceVolume();
 
         foreach (var kvp in activeSoundBaseVolumes)
         {
@@ -149,13 +150,13 @@ public class SoundFXManager : MonoBehaviour
     {
         if (ambientSource.clip == newClip) return;
         ambientBaseVolume = targetVolume;
-        StopAllCoroutines();
-        StartCoroutine(FadeAmbient(newClip, targetVolume * GetMusicVolume()));
+        StopCoroutine(nameof(FadeAmbient));
+        StartCoroutine(FadeAmbient(newClip, targetVolume * GetAmbienceVolume()));
     }
 
     public void StopAmbient()
     {
-        StopAllCoroutines();
+        StopCoroutine(nameof(FadeAmbient));
         StartCoroutine(FadeAmbient(null, 0f));
     }
 

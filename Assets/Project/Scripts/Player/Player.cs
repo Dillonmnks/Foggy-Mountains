@@ -21,6 +21,11 @@ public class Player : MonoBehaviour
     public bool Unkillable = false;
 
 
+    [Header("Sounds")]
+    public AudioClip[] obstacleHitSounds;
+    public AudioClip collectableSound;
+
+
     private void Awake()
     {
         if(Instance != null && Instance != this)
@@ -107,14 +112,16 @@ public class Player : MonoBehaviour
 
         if (isObstacle)
         {
+            SoundFXManager.Instance.PlaySoundFXClip(obstacleHitSounds[UnityEngine.Random.Range(0, obstacleHitSounds.Length)], transform);
             OnObstacleCollision?.Invoke();
         }
 
         if (isCollectible)
         {
             OnCollect?.Invoke();
+            SoundFXManager.Instance.PlaySoundFXClip(collectableSound, transform);
 
-            if(collectible != null)
+            if (collectible != null)
             {
                 collectible.OnCollect();
             }

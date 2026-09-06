@@ -19,7 +19,7 @@ public class VolumeManager : MonoBehaviour
     public float GetCurrentMasterVolume => masterVolume;
     public float GetCurrentSFXVolume => masterVolume * sfxVolume;
     public float GetCurrentMusicVolume => masterVolume * musicVolume;
-    public float GetCurrentAmienceVolume => masterVolume * ambienceVolume;
+    public float GetCurrentAmbienceVolume => masterVolume * ambienceVolume;
 
     public float RawSFXVolume => sfxVolume;
     public float RawMusicVolume => musicVolume;

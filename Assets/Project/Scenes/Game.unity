@@ -844,6 +844,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   CurrentLane: 1
+  switchingLaneSound: {fileID: 8300000, guid: 65a5bcc4ae772ce4184c84eaa362393d, type: 3}
 --- !u!114 &558791765
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -857,6 +858,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
   Unkillable: 0
+  obstacleHitSounds:
+  - {fileID: 8300000, guid: b69309ba6e3914643b4e94cc38cf5d90, type: 3}
+  - {fileID: 8300000, guid: b9d4cf06e3e0d6547a63da927b2762cb, type: 3}
+  - {fileID: 8300000, guid: b9dffb735a7a5e64e9470b015f203ac6, type: 3}
+  collectableSound: {fileID: 8300000, guid: 6a1f842a6c8fd0e499eb63abae4ca91c, type: 3}
 --- !u!54 &558791766
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2448,6 +2454,7 @@ MonoBehaviour:
   collectibleSpawnChance: 0.05
   activeLanes: []
   poolSize: 6
+  safeLaneCount: 3
 --- !u!4 &1674844150
 Transform:
   m_ObjectHideFlags: 0

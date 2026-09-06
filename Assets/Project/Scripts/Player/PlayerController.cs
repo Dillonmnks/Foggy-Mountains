@@ -8,6 +8,9 @@ public class PlayerController : MonoBehaviour
     private float laneSwitchDuration = 0.05f;
     private float laneSwitchTimer = 0f;
 
+    [Header("Sound")]
+    public AudioClip switchingLaneSound;
+
     private Lane targetLane;
 
     public enum Lane
@@ -85,6 +88,7 @@ public class PlayerController : MonoBehaviour
 
     private void StartLaneSwitch()
     {
+        SoundFXManager.Instance.PlaySoundFXClip(switchingLaneSound, transform);
         isSwitchingLane = true;
         laneSwitchTimer = 0f;
     }
