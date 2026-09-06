@@ -599,8 +599,12 @@ GameObject:
   - component: {fileID: 558791761}
   - component: {fileID: 558791760}
   - component: {fileID: 558791759}
+  - component: {fileID: 558791765}
+  - component: {fileID: 558791764}
+  - component: {fileID: 558791763}
+  - component: {fileID: 558791766}
   m_Layer: 0
-  m_Name: playerTemp
+  m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -621,7 +625,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -699,6 +703,70 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &558791763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 558791758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f7f51fa0f3351347b3a28a71e6f4268, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInput
+--- !u!114 &558791764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 558791758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3948567ffc0047f4b80da2274175f9f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerController
+  CurrentLane: 1
+--- !u!114 &558791765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 558791758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fcc4bb24ac83af4db00454214dbac67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Player
+--- !u!54 &558791766
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 558791758}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &649260704
 GameObject:
   m_ObjectHideFlags: 0
@@ -1012,7 +1080,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1674844149
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1025,12 +1093,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bed7f4b1ee87de84c86b52932a77f0df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EndlessLaneGenerator
-  gameSpeed: 0
+  gameSpeed: 1
   lanePrefab: {fileID: 2584178576433794774, guid: f3945c66c599fd44da6f27c356e781e2, type: 3}
   obstaclePrefabs:
-  - {fileID: 558791758}
-  collectiblePrefabs: []
-  laneLength: 10
+  - {fileID: 9198087270559063166, guid: 01ba5a29eb3d74646a5b4867f42e939e, type: 3}
+  collectiblePrefabs:
+  - {fileID: 223129365292603254, guid: dc4a9d49f25cfe743877b8fc0d2057f3, type: 3}
+  - {fileID: 8297825646064300543, guid: 67204d984d817c74fb788e5c7cc3ef89, type: 3}
+  - {fileID: 8633475071082913484, guid: 8a2f311c98eebce47a0b88096927a2bd, type: 3}
+  - {fileID: 5001237145132338356, guid: 0fa958c22d1039f4aa8911c222f86d91, type: 3}
+  laneLength: 35
   lanesAhead: 5
   collectibleSpawnChance: 0.05
   activeLanes: []
