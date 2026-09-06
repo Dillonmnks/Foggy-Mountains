@@ -42,7 +42,7 @@ public class PlayerHealthManager : MonoBehaviour
     {
         for (int i = 0; i < hearts.Length; i++)
         {
-            hearts[i].enabled = i < Player.Lives;
+            hearts[i].enabled = i + 1 < Player.Lives;
         }
     }
 }
