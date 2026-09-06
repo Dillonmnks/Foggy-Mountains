@@ -5,11 +5,13 @@ public class PlayerController : MonoBehaviour
     public Lane CurrentLane = Lane.Middle;
 
     private bool isSwitchingLane = false;
-    private float laneSwitchDuration = 0.1f;
+    private float laneSwitchDuration = 0.05f;
     private float laneSwitchTimer = 0f;
 
     private float laneSwitchStartX;
     private Lane targetLane;
+
+    public AudioClip MoveSound;
 
     public enum Lane { Left, Middle, Right }
 
@@ -53,6 +55,9 @@ public class PlayerController : MonoBehaviour
         if (CurrentLane == Lane.Left)
             return;
 
+        if (MoveSound != null)
+            SoundFXManager.Instance.PlaySoundFXClip(MoveSound, transform);
+
         targetLane = (CurrentLane == Lane.Middle) ? Lane.Left : Lane.Middle;
         StartLaneSwitch();
     }
@@ -64,6 +69,9 @@ public class PlayerController : MonoBehaviour
 
         if (CurrentLane == Lane.Right)
             return;
+
+        if(MoveSound != null)
+            SoundFXManager.Instance.PlaySoundFXClip(MoveSound, transform);
 
         targetLane = (CurrentLane == Lane.Middle) ? Lane.Right : Lane.Middle;
         StartLaneSwitch();

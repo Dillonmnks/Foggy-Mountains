@@ -844,7 +844,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   CurrentLane: 1
-  switchingLaneSound: {fileID: 8300000, guid: 65a5bcc4ae772ce4184c84eaa362393d, type: 3}
+  MoveSound: {fileID: 8300000, guid: 65a5bcc4ae772ce4184c84eaa362393d, type: 3}
 --- !u!114 &558791765
 MonoBehaviour:
   m_ObjectHideFlags: 0
