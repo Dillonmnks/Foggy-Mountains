@@ -737,7 +737,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -853,6 +853,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fcc4bb24ac83af4db00454214dbac67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
+  Unkillable: 0
 --- !u!54 &558791766
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2427,7 +2428,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bed7f4b1ee87de84c86b52932a77f0df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EndlessLaneGenerator
-  gameSpeed: 1
   lanePrefab: {fileID: 2584178576433794774, guid: f3945c66c599fd44da6f27c356e781e2, type: 3}
   obstaclePrefabs:
   - {fileID: 9198087270559063166, guid: 01ba5a29eb3d74646a5b4867f42e939e, type: 3}

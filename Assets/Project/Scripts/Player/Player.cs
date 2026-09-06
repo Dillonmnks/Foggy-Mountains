@@ -35,6 +35,11 @@ public class Player : MonoBehaviour
         MaxLives = 3;
     }
 
+    private void Update()
+    {
+        Debug.Log("Lives: " + Lives);
+    }
+
     private void OnEnable()
     {
         OnPlayerDeath += SaveScore;
