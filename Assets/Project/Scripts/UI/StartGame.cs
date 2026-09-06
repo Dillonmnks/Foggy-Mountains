@@ -13,6 +13,7 @@ public class StartGame : MonoBehaviour
             Debug.Log($"Name length: {textField.text.Length - 1}");
             return;
         }
+
         GameManager.Instance.SetName(textField.text);
         SceneManager.LoadScene("Game");
     }
