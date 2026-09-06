@@ -8,6 +8,11 @@ public class ScoresManager : MonoBehaviour
     public RectTransform Content;
     public GameObject ScoreEntryPrefab;
 
+    private void Awake()
+    {
+        Scores = ScoreboardStorage.Load();
+    }
+
     private void OnEnable()
     {
         Scores = ScoreboardStorage.Load();
@@ -19,10 +24,47 @@ public class ScoresManager : MonoBehaviour
         ClearContent();
         SortScores();
 
-        foreach(var s in Scores)
+        if (Scores == null)
+        {
+            Debug.LogError("Scores is NULL");
+            return;
+        }
+
+        if (ScoreEntryPrefab == null)
+        {
+            Debug.LogError("ScoreEntryPrefab is NULL");
+            return;
+        }
+
+        if (Content == null)
+        {
+            Debug.LogError("Content is NULL");
+            return;
+        }
+
+        foreach (var s in Scores)
         {
             GameObject entry = Instantiate(ScoreEntryPrefab, Content);
+
+            if (entry == null)
+            {
+                Debug.LogError("Instantiate returned NULL");
+                continue;
+            }
+
             var ui = entry.GetComponent<ScoreEntry>();
+
+            if (ui == null)
+            {
+                Debug.LogError("ScoreEntry component is missing on prefab: " + entry.name);
+                continue;
+            }
+
+            if (s == null)
+            {
+                Debug.LogError("ScoreEntryData is NULL inside Scores list");
+                continue;
+            }
 
             ui.Init(s.Position.ToString(), s.Score.ToString(), s.Name);
         }

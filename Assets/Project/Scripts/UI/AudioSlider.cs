@@ -19,6 +19,22 @@ public class AudioSlider : MonoBehaviour
 
     private void OnEnable()
     {
+        switch (ModifyVolume)
+        {
+            case Volume.Master:
+                Slider.value = VolumeManager.Instance.GetCurrentMasterVolume * 100f;
+                break;
+            case Volume.SFX:
+                Slider.value = VolumeManager.Instance.RawSFXVolume * 100f;
+                break;
+            case Volume.Music:
+                Slider.value = VolumeManager.Instance.RawMusicVolume * 100f;
+                break;
+            case Volume.Ambience:
+                Slider.value = VolumeManager.Instance.RawAmbienceVolume * 100f;
+                break;
+        }
+
         UpdatePreviewText();
     }
 
@@ -26,6 +42,8 @@ public class AudioSlider : MonoBehaviour
     {
         string text = Slider.value.ToString() + "%";
         AmountPreview.text = text;
+
+        UpdateVolume();
     }
 
     public void UpdateVolume()
@@ -33,13 +51,16 @@ public class AudioSlider : MonoBehaviour
         switch (ModifyVolume)
         {
             case Volume.Master:
-                //audiomanager.setMasterVolume(slider.value)
+                VolumeManager.Instance.SetMasterVolume(Slider.value * 0.01f);
                 break;
             case Volume.SFX:
+                VolumeManager.Instance.SetSFXVolume(Slider.value * 0.01f);
                 break;
             case Volume.Music:
+                VolumeManager.Instance.SetMusicVolume(Slider.value * 0.01f);
                 break;
             case Volume.Ambience:
+                VolumeManager.Instance.SetAmbienceVolume(Slider.value * 0.01f);
                 break;
         }
     }

@@ -30,6 +30,9 @@ public class Player : MonoBehaviour
         }
 
         Instance = this;
+
+        Lives = 3;
+        MaxLives = 3;
     }
 
     private void OnEnable()
@@ -37,7 +40,7 @@ public class Player : MonoBehaviour
         OnPlayerDeath += SaveScore;
         OnObstacleCollision += RemoveLife;
 
-        Name = GameManager.Name;
+        Name = GameManager.Instance.Name;
 
         if (Name == "")
             Name = "BOB";
