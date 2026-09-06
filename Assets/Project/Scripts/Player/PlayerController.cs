@@ -5,19 +5,32 @@ public class PlayerController : MonoBehaviour
     public Lane CurrentLane = Lane.Middle;
 
     private bool isSwitchingLane = false;
-    private float laneSwitchDuration = 0.05f;
+    private float laneSwitchDuration = 0.1f;
     private float laneSwitchTimer = 0f;
 
-    [Header("Sound")]
-    public AudioClip switchingLaneSound;
-
+    private float laneSwitchStartX;
     private Lane targetLane;
 
-    public enum Lane
+    public enum Lane { Left, Middle, Right }
+
+    private void FixedUpdate()
     {
-        Left,
-        Middle,
-        Right
+        if (isSwitchingLane)
+        {
+            laneSwitchTimer += Time.fixedDeltaTime;
+            float t = laneSwitchTimer / laneSwitchDuration;
+
+            float newX = Mathf.Lerp(
+                laneSwitchStartX,
+                LaneManager.LaneX[(int)targetLane],
+                t
+            );
+
+            transform.position = new Vector3(newX, transform.position.y, transform.position.z);
+
+            if (t >= 1f)
+                isSwitchingLane = false;
+        }
     }
 
     private void OnEnable()
@@ -32,36 +45,9 @@ public class PlayerController : MonoBehaviour
         PlayerInput.Instance.OnRight -= HandleRight;
     }
 
-    private void Update()
-    {
-        if (isSwitchingLane)
-        {
-            laneSwitchTimer += Time.deltaTime;
-
-            float t = laneSwitchTimer / laneSwitchDuration;
-
-            float newX = Mathf.Lerp(
-                LaneManager.LaneX[(int)CurrentLane],
-                LaneManager.LaneX[(int)targetLane],
-                t
-            );
-
-            transform.position = new Vector3(newX, transform.position.y, transform.position.z);
-
-            if (t >= 1f)
-            {
-                CurrentLane = targetLane;
-                isSwitchingLane = false;
-            }
-        }
-    }
-
     private void HandleLeft(bool pressed)
     {
-        if (!pressed || Time.timeScale == 0f)
-            return;
-
-        if (isSwitchingLane)
+        if (!pressed || isSwitchingLane)
             return;
 
         if (CurrentLane == Lane.Left)
@@ -73,10 +59,7 @@ public class PlayerController : MonoBehaviour
 
     private void HandleRight(bool pressed)
     {
-        if (!pressed || Time.timeScale == 0f)
-            return;
-
-        if (isSwitchingLane)
+        if (!pressed || isSwitchingLane)
             return;
 
         if (CurrentLane == Lane.Right)
@@ -88,8 +71,10 @@ public class PlayerController : MonoBehaviour
 
     private void StartLaneSwitch()
     {
-        SoundFXManager.Instance.PlaySoundFXClip(switchingLaneSound, transform);
         isSwitchingLane = true;
         laneSwitchTimer = 0f;
+
+        laneSwitchStartX = transform.position.x;
+        CurrentLane = targetLane;
     }
 }
