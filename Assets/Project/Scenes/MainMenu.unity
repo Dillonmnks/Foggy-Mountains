@@ -788,7 +788,8 @@ MonoBehaviour:
   m_text: "Controls:\n - \"A\" & \"D\" keys to move right/left\n - Hold LMB to clean
     goggles\n \nCollectibles:\n - Cigarettes: Slow Down, VERY COMMON\n - Red Bull:
     Increase Acceleration, COMMON\n - Snus: Bonus Score, RARE\n - Beer: Gain Heart,
-    SUPER RARE"
+    SUPER RARE\n\nGoal:\n - The goal is simple: Get the highest score possible and
+    rank #1 on the scoreboard.\n\nSincerely, DZO and Legionaire ;)"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
