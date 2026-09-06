@@ -8,13 +8,11 @@ public class Player : MonoBehaviour
 
     [Header("Stats")]
     public static string Name { get; private set; }
-    public static int Points { get; private set; }
 
     [Header("Skills")]
     public static float ClearSpeed { get; private set; }
     public static int MaxLives { get; private set; }
     public static int Lives { get; private set; }
-    public static float Acceleration {  get; private set; }
 
     public static event Action OnObstacleCollision;
     public static event Action OnCollect;
@@ -44,8 +42,6 @@ public class Player : MonoBehaviour
 
         if (Name == "")
             Name = "BOB";
-
-        Points = 0;
     }
 
     private void OnDisable()
@@ -55,14 +51,6 @@ public class Player : MonoBehaviour
     }
 
     public static void SetName(string name) => Name = name;
-
-    public static void SetPoints(int points) => Points = points;
-
-    public static void AddPoints(int points) => Points += points;
-
-    public static void RemovePoints(int points) => Points = Mathf.Max(Points - points, 0);
-
-    public static void SetClearSpeed(float speed) => ClearSpeed = speed;
 
     public static void SetMaxLives(int amount) => MaxLives = amount;
 
@@ -89,8 +77,6 @@ public class Player : MonoBehaviour
             OnPlayerDeath?.Invoke();
     }
     public static void RemoveMaxLife() => MaxLives = Mathf.Max(MaxLives - 1, 1);
-
-    public static void SetAcceleration(float amount) => Acceleration = amount;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -130,7 +116,7 @@ public class Player : MonoBehaviour
         Scores.Add(new ScoreEntryData
         {
             Name = Name,
-            Score = Points,
+            Score = ScoreManager.Instance.TotalPoints,
             Position = Scores.Count + 1
         });
 
